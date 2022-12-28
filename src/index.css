@@ -1,13 +1,67 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+form label {
+  font-size: 18px;
+}
+
+div {
+  margin: 0;
+}
+
+.App .lang {
+  width: 200px;
+}
+
+form .f-check {
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+form .add {
+  width: 100%;
+  margin-top: 10px;
+}
+
+form .hidden {
+  visibility: hidden;
+  width: 200px;
+}
+
+.App .m-btn {
+  width: 50%;
+}
+
+@media screen and (max-width: 575px) {
+  .App .m-btn {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  form .add {
+    margin-top: 10px;
+    width: 120px;
+  }
+
+  form .nameCustomer {
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  form .f-check {
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  form .f-check .f-label {
+    margin-left: 8px;
+  }
 }
