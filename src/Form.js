@@ -56,7 +56,6 @@ function Form() {
         },
       },
     ]);
-
     setQtys([...qtys, Number(data.qtyNumber)]);
     setRates([...rates, Number(data.rateNumber)]);
     setKgOrUnits([...kgOrUnits, Number(data.kgOrUnit)]);
@@ -66,25 +65,6 @@ function Form() {
     ]);
 
     reset({ qtyNumber: "", customerName: "", kgOrUnit: "", multiply: false });
-    console.log({
-      ...data,
-      traderOrFarmerName: {
-        name: data.traderOrFarmerName.split("_")[0],
-        id: data.traderOrFarmerName.split("_")[1],
-      },
-      customerName: {
-        name: data.customerName.split("_")[0],
-        id: data.customerName.split("_")[1],
-      },
-      vegetableName: {
-        name: data.vegetableName.split("_")[0],
-        id: data.vegetableName.split("_")[1],
-      },
-      firstUnit: {
-        name: data.firstUnit.split("_")[0],
-        id: data.firstUnit.split("_")[1],
-      },
-    });
   };
 
   function deleteRow(rowIndex) {
@@ -121,7 +101,6 @@ function Form() {
   function submitForm() {
     setShowToast(true);
     if (subData?.length > 0) {
-      setShowToast(true);
       axios({
         url: "https://my-json-server.typicode.com/mrkarimoff/fake-backend/tableData",
         method: "POST",
@@ -136,13 +115,6 @@ function Form() {
       setShowToast(false);
     }, 3000);
   }
-
-  // function showToast() {
-  //   const toastLiveExample = document.getElementById("liveToast");
-  //   const toast = new bootstrap.Toast(toastLiveExample);
-
-  //   toast.show();
-  // }
 
   return (
     <div className="App">
@@ -194,6 +166,7 @@ function Form() {
         </div>
       </div>
 
+      {/* Header */}
       <div className="d-flex  align-items-center justify-content-between">
         <h1 className="text-center w-75">{langData[0]?.title}</h1>
         <div className="lang mx-3">
@@ -204,6 +177,7 @@ function Form() {
         </div>
       </div>
 
+      {/* Form Content */}
       <div className="container pt-2">
         <div className="d-flex justify-content-end">
           <button
@@ -398,6 +372,8 @@ function Form() {
             </div>
           </div>
         </form>
+
+        {/* Table Content */}
         <Table
           tableLangDate={langData[0]?.table}
           deleteRow={deleteRow}
@@ -405,7 +381,9 @@ function Form() {
           data={subData}
         />
         <hr />
-        <div className="m-0 d-flex justify-content-end">
+
+        {/* Main Buttons */}
+        <div className="m-0 mb-3 d-flex justify-content-end">
           <div className="btn-cont  d-flex gap-4 m-btn">
             <button onClick={submitForm} type="button" className="btn btn-success w-100">
               {langData[0]?.submitBtn}
