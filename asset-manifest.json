@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/agro-form/static/css/main.b3fa470c.css",
-    "main.js": "/agro-form/static/js/main.bb8ba5e9.js",
+    "main.css": "/agro-form/static/css/main.8f47c396.css",
+    "main.js": "/agro-form/static/js/main.1b3461fc.js",
     "static/media/reload.png": "/agro-form/static/media/reload.4403e7d4fc73d592c7a5.png",
     "index.html": "/agro-form/index.html",
-    "main.b3fa470c.css.map": "/agro-form/static/css/main.b3fa470c.css.map",
-    "main.bb8ba5e9.js.map": "/agro-form/static/js/main.bb8ba5e9.js.map"
+    "main.8f47c396.css.map": "/agro-form/static/css/main.8f47c396.css.map",
+    "main.1b3461fc.js.map": "/agro-form/static/js/main.1b3461fc.js.map"
   },
   "entrypoints": [
-    "static/css/main.b3fa470c.css",
-    "static/js/main.bb8ba5e9.js"
+    "static/css/main.8f47c396.css",
+    "static/js/main.1b3461fc.js"
   ]
 }
