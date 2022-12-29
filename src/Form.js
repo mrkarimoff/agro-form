@@ -18,6 +18,13 @@ function Form() {
   const [langData, setLangData] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [toastText, setToastText] = useState("");
+  const [firstUnit, setFirstUnit] = useState("");
+  const [rowIndex, setRowIndex] = useState("");
+  const date = new Date();
+
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
 
   const {
     register,
@@ -27,6 +34,7 @@ function Form() {
   } = useForm();
 
   useEffect(() => {
+    console.log("Worked");
     axios({
       url: "https://my-json-server.typicode.com/mrkarimoff/fake-backend/" + lang,
       method: "GET",
@@ -53,35 +61,42 @@ function Form() {
         firstUnit: {
           name: data.firstUnit.split("_")[0],
           id: data.firstUnit.split("_")[1],
+          unit: data.firstUnit.split("_")[2],
         },
       },
     ]);
     setQtys([...qtys, Number(data.qtyNumber)]);
     setRates([...rates, Number(data.rateNumber)]);
     setKgOrUnits([...kgOrUnits, Number(data.kgOrUnit)]);
-    setAmounts([
-      ...amounts,
-      Number(data.qtyNumber) * Number(data.rateNumber) * Number(data.kgOrUnit),
-    ]);
+    if (data.multiply) {
+      setAmounts([
+        ...amounts,
+        Number(data.qtyNumber) * Number(data.rateNumber) * Number(data.kgOrUnit),
+      ]);
+    } else {
+      setAmounts([...amounts, Number(data.qtyNumber) * Number(data.rateNumber)]);
+    }
 
     reset({ qtyNumber: "", customerName: "", kgOrUnit: "", multiply: false });
   };
 
-  function deleteRow(rowIndex) {
-    subData.splice(rowIndex, 1);
-    qtys.splice(rowIndex, 1);
-    rates.splice(rowIndex, 1);
-    kgOrUnits.splice(rowIndex, 1);
-    amounts.splice(rowIndex, 1);
-    setSubData([...subData]);
-    setQtys([...qtys]);
-    setRates([...rates]);
-    setKgOrUnits([...kgOrUnits]);
-    setAmounts([...amounts]);
+  function bringRowIndex(rIndex) {
+    setRowIndex(rIndex);
   }
 
-  function onConfirm() {
-    if (isReload) {
+  function onConfirm(rowIndex) {
+    if (rowIndex !== "") {
+      subData.splice(rowIndex, 1);
+      qtys.splice(rowIndex, 1);
+      rates.splice(rowIndex, 1);
+      kgOrUnits.splice(rowIndex, 1);
+      amounts.splice(rowIndex, 1);
+      setSubData([...subData]);
+      setQtys([...qtys]);
+      setRates([...rates]);
+      setKgOrUnits([...kgOrUnits]);
+      setAmounts([...amounts]);
+    } else if (isReload) {
       reset({
         traderOrFarmerName: "",
         vegetableName: "",
@@ -96,11 +111,13 @@ function Form() {
       reset();
     }
     setIsReload(false);
+    setRowIndex("");
   }
 
   function submitForm() {
     setShowToast(true);
     if (subData?.length > 0) {
+      alert(JSON.stringify(subData));
       axios({
         url: "https://my-json-server.typicode.com/mrkarimoff/fake-backend/tableData",
         method: "POST",
@@ -153,7 +170,7 @@ function Form() {
             </div>
             <div className="modal-footer">
               <button
-                onClick={onConfirm}
+                onClick={() => onConfirm(rowIndex)}
                 data-bs-toggle="modal"
                 data-bs-target="#alertModal"
                 type="button"
@@ -203,6 +220,7 @@ function Form() {
               className="form-control"
               id="datePicker"
               required
+              defaultValue={`${year}-${month}-${day}`}
             />
           </div>
           <div className="col-lg-3 col-md-5">
@@ -269,11 +287,14 @@ function Form() {
           </div>
           <div className="col-lg-2 col-md-3">
             <label htmlFor="firstUnit" className="form-label">
-              {langData[0]?.firstUnit?.label}
+              {langData[0]?.firstUnit?.label}{" "}
+              <span style={{ fontSize: "12px", marginLeft: "5px" }}>{firstUnit}</span>
             </label>
             <select
               defaultValue={""}
-              {...register("firstUnit")}
+              {...register("firstUnit", {
+                onChange: (e) => setFirstUnit(Number(e.target.value.split("_")[2]).toFixed(2)),
+              })}
               className="form-select"
               id="firstUnit"
               required
@@ -282,7 +303,7 @@ function Form() {
                 {langData[0]?.firstUnit?.defOption}
               </option>
               {langData[0]?.firstUnit?.options.map((opt, index) => (
-                <option value={`${opt.value}_${opt.id}`} key={index}>
+                <option value={`${opt.value}_${opt.id}_${opt.unit}`} key={index}>
                   {opt.label}
                 </option>
               ))}
@@ -341,7 +362,6 @@ function Form() {
                   className="form-check-input"
                   type="checkbox"
                   id="multiplicationCheck"
-                  required
                 />
               </div>
             </div>
@@ -376,9 +396,10 @@ function Form() {
         {/* Table Content */}
         <Table
           tableLangDate={langData[0]?.table}
-          deleteRow={deleteRow}
+          bringRowIndex={bringRowIndex}
           totals={{ qtys, kgOrUnits, amounts, rates }}
           data={subData}
+          setAlertMessage={setAlertMessage}
         />
         <hr />
 

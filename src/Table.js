@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-export default function Table({ data, totals, deleteRow, tableLangDate }) {
+export default function Table({ data, totals, bringRowIndex, tableLangDate, setAlertMessage }) {
   const [delIndex, setDelIndex] = useState("");
+  const [isDelete, setIsDelete] = useState(false);
 
   useEffect(() => {
-    deleteRow(delIndex);
-  }, [delIndex]);
+    bringRowIndex(delIndex);
+    setIsDelete(false);
+  }, [isDelete]);
 
   return (
     <div className="table-responsive pt-4">
@@ -31,14 +33,28 @@ export default function Table({ data, totals, deleteRow, tableLangDate }) {
               <td className="text-end">{Number(item.rateNumber).toFixed(2)}</td>
               <td className="text-end">{Number(item.kgOrUnit).toFixed(2)}</td>
               <td className="text-end">
-                {Number(
-                  Math.round(
-                    Number(item.qtyNumber) * Number(item.rateNumber) * Number(item.kgOrUnit) + "e6"
-                  ) + "e-6"
-                )}
+                {item.multiply
+                  ? Number(
+                      Math.round(
+                        Number(item.qtyNumber) * Number(item.rateNumber) * Number(item.kgOrUnit) +
+                          "e6"
+                      ) + "e-6"
+                    )
+                  : Number(
+                      Math.round(Number(item.qtyNumber) * Number(item.rateNumber) + "e6") + "e-6"
+                    )}
               </td>
               <td>
-                <button onClick={() => setDelIndex(index)} className="btn btn-danger">
+                <button
+                  data-bs-toggle="modal"
+                  data-bs-target="#alertModal"
+                  onClick={() => {
+                    setDelIndex(index);
+                    setAlertMessage(tableLangDate?.deleteMsg);
+                    setIsDelete(true);
+                  }}
+                  className="btn btn-danger"
+                >
                   {tableLangDate?.delBtn}
                 </button>
               </td>
