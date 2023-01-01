@@ -48,11 +48,11 @@ function Form() {
         ...data,
         traderOrFarmerName: {
           name: data.traderOrFarmerName.split("_")[0],
-          id: data.traderOrFarmerName.split("_")[1],
+          user_id: data.traderOrFarmerName.split("_")[1],
         },
         customerName: {
           name: data.customerName.split("_")[0],
-          id: data.customerName.split("_")[1],
+          client_id: data.customerName.split("_")[1],
         },
         vegetableName: {
           name: data.vegetableName.split("_")[0],
@@ -63,6 +63,7 @@ function Form() {
           id: data.firstUnit.split("_")[1],
           unit: data.firstUnit.split("_")[2],
         },
+        lang,
       },
     ]);
     setQtys([...qtys, Number(data.qtyNumber)]);
@@ -117,7 +118,7 @@ function Form() {
   function submitForm() {
     setShowToast(true);
     if (subData?.length > 0) {
-      alert(JSON.stringify(subData));
+      console.log(subData);
       axios({
         url: "https://my-json-server.typicode.com/mrkarimoff/fake-backend/tableData",
         method: "POST",
@@ -209,18 +210,26 @@ function Form() {
             <img width={30} src={reload} alt="reload" />
           </button>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="row g-3 mx-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="row g-3 mx-2 mb-2">
           <div className="col-lg-2 col-md-3">
             <label htmlFor="datePicker" className="form-label">
               {langData[0]?.date?.label}
             </label>
             <input
+              onInvalid={(e) => {
+                if (!e.target.validity.valid) {
+                  e.target.setCustomValidity(langData[0]?.invalidFieldMsg);
+                }
+              }}
+              onInput={(e) => e.target.setCustomValidity("")}
               {...register("date")}
               type="date"
               className="form-control"
               id="datePicker"
               required
-              defaultValue={`${year}-${month}-${day}`}
+              defaultValue={`${year}-${month < 10 ? "0" + month : month}-${
+                day < 10 ? "0" + day : day
+              }`}
             />
           </div>
           <div className="col-lg-3 col-md-5">
@@ -228,6 +237,12 @@ function Form() {
               {langData[0]?.traderName?.label}
             </label>
             <select
+              onInvalid={(e) => {
+                if (!e.target.validity.valid) {
+                  e.target.setCustomValidity(langData[0]?.invalidSelectMsg);
+                }
+              }}
+              onInput={(e) => e.target.setCustomValidity("")}
               defaultValue={""}
               {...register("traderOrFarmerName")}
               className="form-select"
@@ -249,6 +264,12 @@ function Form() {
               {langData[0]?.vegetableName?.label}
             </label>
             <select
+              onInvalid={(e) => {
+                if (!e.target.validity.valid) {
+                  e.target.setCustomValidity(langData[0]?.invalidSelectMsg);
+                }
+              }}
+              onInput={(e) => e.target.setCustomValidity("")}
               defaultValue={""}
               {...register("vegetableName")}
               className="form-select"
@@ -270,6 +291,12 @@ function Form() {
               {langData[0]?.rate?.label}
             </label>
             <input
+              onInvalid={(e) => {
+                if (!e.target.validity.valid) {
+                  e.target.setCustomValidity(langData[0]?.invalidFieldMsg);
+                }
+              }}
+              onInput={(e) => e.target.setCustomValidity("")}
               step=".01"
               {...register("rateNumber", {
                 min: { value: 0.01, message: langData[0]?.errMsg },
@@ -291,6 +318,12 @@ function Form() {
               <span style={{ fontSize: "12px", marginLeft: "5px" }}>{firstUnit}</span>
             </label>
             <select
+              onInvalid={(e) => {
+                if (!e.target.validity.valid) {
+                  e.target.setCustomValidity(langData[0]?.invalidSelectMsg);
+                }
+              }}
+              onInput={(e) => e.target.setCustomValidity("")}
               defaultValue={""}
               {...register("firstUnit", {
                 onChange: (e) => setFirstUnit(Number(e.target.value.split("_")[2]).toFixed(2)),
@@ -316,6 +349,12 @@ function Form() {
                 {langData[0]?.customerName?.label}
               </label>
               <select
+                onInvalid={(e) => {
+                  if (!e.target.validity.valid) {
+                    e.target.setCustomValidity(langData[0]?.invalidSelectMsg);
+                  }
+                }}
+                onInput={(e) => e.target.setCustomValidity("")}
                 required
                 defaultValue={""}
                 {...register("customerName")}
@@ -337,6 +376,12 @@ function Form() {
                 {langData[0]?.kgOrUnit?.label}
               </label>
               <input
+                onInvalid={(e) => {
+                  if (!e.target.validity.valid) {
+                    e.target.setCustomValidity(langData[0]?.invalidFieldMsg);
+                  }
+                }}
+                onInput={(e) => e.target.setCustomValidity("")}
                 step=".01"
                 {...register("kgOrUnit", {
                   min: { value: 0.01, message: langData[0]?.errMsg },
@@ -358,6 +403,12 @@ function Form() {
                   x
                 </label>
                 <input
+                  onInvalid={(e) => {
+                    if (!e.target.validity.valid) {
+                      e.target.setCustomValidity(langData[0]?.invalidFieldMsg);
+                    }
+                  }}
+                  onInput={(e) => e.target.setCustomValidity("")}
                   {...register("multiply")}
                   className="form-check-input"
                   type="checkbox"
@@ -370,6 +421,12 @@ function Form() {
                 {langData[0]?.qtyNumber?.label}
               </label>
               <input
+                onInvalid={(e) => {
+                  if (!e.target.validity.valid) {
+                    e.target.setCustomValidity(langData[0]?.invalidFieldMsg);
+                  }
+                }}
+                onInput={(e) => e.target.setCustomValidity("")}
                 step=".01"
                 {...register("qtyNumber", {
                   min: { value: 0.01, message: langData[0]?.errMsg },
@@ -394,13 +451,15 @@ function Form() {
         </form>
 
         {/* Table Content */}
-        <Table
-          tableLangDate={langData[0]?.table}
-          bringRowIndex={bringRowIndex}
-          totals={{ qtys, kgOrUnits, amounts, rates }}
-          data={subData}
-          setAlertMessage={setAlertMessage}
-        />
+        <div className="container table-wrapper">
+          <Table
+            tableLangDate={langData[0]?.table}
+            bringRowIndex={bringRowIndex}
+            totals={{ qtys, kgOrUnits, amounts, rates }}
+            data={subData}
+            setAlertMessage={setAlertMessage}
+          />
+        </div>
         <hr />
 
         {/* Main Buttons */}

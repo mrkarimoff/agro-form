@@ -16,6 +16,17 @@ div {
   width: 200px;
 }
 
+.App .table-wrapper {
+  max-height: 440px;
+  overflow: auto;
+}
+
+.App thead .header {
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+}
+
 form .f-check {
   font-size: 24px;
   display: flex;

@@ -8,14 +8,13 @@ export default function Table({ data, totals, bringRowIndex, tableLangDate, setA
     bringRowIndex(delIndex);
     setIsDelete(false);
   }, [isDelete]);
-
   return (
-    <div className="table-responsive pt-4">
-      <table style={{ fontSize: "18px" }} className="table table-bordered">
+    <div className="mt-3">
+      <table style={{ fontSize: "18px" }} className="table table-bordered table-responsive">
         <thead>
           <tr className="table table-dark">
             {tableLangDate?.columns?.map((column, index) => (
-              <th key={index} scope="col">
+              <th className="header" key={index} scope="col">
                 {column}
               </th>
             ))}
