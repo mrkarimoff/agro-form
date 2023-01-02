@@ -48,11 +48,11 @@ function Form() {
         ...data,
         traderOrFarmerName: {
           name: data.traderOrFarmerName.split("_")[0],
-          user_id: data.traderOrFarmerName.split("_")[1],
+          id: data.traderOrFarmerName.split("_")[1],
         },
         customerName: {
           name: data.customerName.split("_")[0],
-          client_id: data.customerName.split("_")[1],
+          id: data.customerName.split("_")[1],
         },
         vegetableName: {
           name: data.vegetableName.split("_")[0],
@@ -64,6 +64,8 @@ function Form() {
           unit: data.firstUnit.split("_")[2],
         },
         lang,
+        user_id: subData.length + 1,
+        client_id: subData.length + 1,
       },
     ]);
     setQtys([...qtys, Number(data.qtyNumber)]);
