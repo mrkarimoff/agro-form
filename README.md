@@ -6,4 +6,4 @@
 - React-hook-form for validation
 - Axios for API calls
 - Github pages for deployment
-- Json sever as a backend
+- Json Sever as a backend
