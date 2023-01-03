@@ -34,7 +34,6 @@ function Form() {
   } = useForm();
 
   useEffect(() => {
-    console.log("Worked");
     axios({
       url: "https://my-json-server.typicode.com/mrkarimoff/fake-backend/" + lang,
       method: "GET",
@@ -165,6 +164,10 @@ function Form() {
                 {alertMessage}
               </h1>
               <button
+                onClick={() => {
+                  setIsReload(false);
+                  setRowIndex("");
+                }}
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
